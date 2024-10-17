@@ -29,7 +29,7 @@ COOKIE_JSP_2=idem
 - ct_no_cookie_hidden_field
 ```
 
->`node script_razengan.js URL`
+>`node main.js URL`
 
 Il est possible de passer un param = 'true' pour obtenir une sortie formaté en JSON. 
->`node script_razengan.js URL true` (non sensible a la casse)
+>`node main.js URL true` (non sensible a la casse)
