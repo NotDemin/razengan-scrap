@@ -3,17 +3,25 @@
 ## Code pour scrap les liens 1fichiers sur le site razengan
 
 Comment installer :
-> `git clone https://github.com/NotDemin/razengan-scrap.git` 
+>`git clone https://github.com/NotDemin/razengan-scrap.git` 
 
-> `npm i`
+>`npm i`
 
 Pour utiliser : 
 >Avoir un compte razengan.club (https://razengan.club/)
 
 >Se connecter
 
+>Ouvrir l'onglet network de votre navigateur (réseau)
+
+>Filtrer en tapant `wp-login.php` dans la barre de filtre
+
+>Aller dans payload et récuperer les deux cookies
+
+![Comme ceci](https://cdn.discordapp.com/attachments/870433433996890193/1296747353725997076/tesdzqzd.png?ex=67136995&is=67121815&hm=ff5ab397634db66e433c6d7f662e0585db61415d3d4761c1294902beca90b4cb&)
+
 >Récuperer la page que l'on souhaite scrap (ex : https://razengan.club/?page_id=5297) 
-> IL FAUT BIEN LA PAGE AVEC LA DEMANDE DE MOT DE PASSE
+>IL FAUT BIEN LA PAGE AVEC LA DEMANDE DE MOT DE PASSE
 
 >Remplir un fichier .env dans le dossier avec les infos suivantes : 
 >(.env.template)

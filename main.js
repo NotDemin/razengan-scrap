@@ -17,11 +17,13 @@ const display_errors = (msg_error) => {
 const check_env_vars = () => {
     if (!process.env.RAZENGAN_LOG || !process.env.RAZENGAN_PWD || !process.env.RAZENGAN_URL || !process.env.COOKIE_JSP_1 || !process.env.COOKIE_JSP_2) {
         const missing_vars = []
-        if (!process.env.RAZENGAN_LOG) missing_vars.push("RAZENGAN_LOG")
-        if (!process.env.RAZENGAN_PWD) missing_vars.push("RAZENGAN_PWD")
-        if (!process.env.RAZENGAN_URL) missing_vars.push("RAZENGAN_URL")
-        if (!process.env.COOKIE_JSP_1) missing_vars.push("COOKIE_JSP_1")
-        if (!process.env.COOKIE_JSP_2) missing_vars.push("COOKIE_JSP_2")
+        const var_to_check = ["RAZENGAN_LOG", "RAZENGAN_PWD", "RAZENGAN_URL", "COOKIE_JSP_1", "COOKIE_JSP_2"]
+
+        var_to_check.forEach(var_name => {
+            if (!process.env[var_name]) {
+                missing_vars.push(var_name)
+            }
+        })
 
         display_errors("Variables d'environnement manquantes: " + missing_vars.join(", "))
         process.exit(1)
