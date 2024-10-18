@@ -15,6 +15,22 @@ const get_anime_name = (html) => {
     return (anime_name || "").trim()
 }
 
+const check_env_vars = () => {
+    if (!process.env.RAZENGAN_LOG || !process.env.RAZENGAN_PWD || !process.env.RAZENGAN_URL || !process.env.COOKIE_JSP_1 || !process.env.COOKIE_JSP_2) {
+        const missing_vars = []
+        const vars_to_check = ["RAZENGAN_LOG", "RAZENGAN_PWD", "RAZENGAN_URL", "COOKIE_JSP_1", "COOKIE_JSP_2"]
+
+        vars_to_check.forEach(var_name => {
+            if (!process.env[var_name]) {
+                missing_vars.push(var_name)
+            }
+        })
+
+        display_errors("Variables d'environnement manquantes: " + missing_vars.join(", "), OUTPUT_JSON)
+        process.exit(1)
+    }
+}
+
 const login = async () => {
     const data_login = {
         'log': process.env.RAZENGAN_LOG,
