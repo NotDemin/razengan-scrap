@@ -1,5 +1,5 @@
 import axios from 'axios';
-import 'dotenv/config'
+import 'dotenv/config';
 import querystring from 'querystring';
 import { display_errors, validate_url } from './utils.js';
 
