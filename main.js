@@ -5,6 +5,24 @@ import querystring from 'querystring';
 const MAIN_URL_EXTRACT = process.argv[2]
 const OUTPUT_JSON = process.argv[3]?.toLowerCase() === "true" ? true : false
 
+const check_env_vars = () => {
+    if (!process.env.RAZENGAN_LOG || !process.env.RAZENGAN_PWD || !process.env.RAZENGAN_URL || !process.env.COOKIE_JSP_1 || !process.env.COOKIE_JSP_2) {
+        const missing_vars = []
+        if (!process.env.RAZENGAN_LOG) missing_vars.push("RAZENGAN_LOG")
+        if (!process.env.RAZENGAN_PWD) missing_vars.push("RAZENGAN_PWD")
+        if (!process.env.RAZENGAN_URL) missing_vars.push("RAZENGAN_URL")
+        if (!process.env.COOKIE_JSP_1) missing_vars.push("COOKIE_JSP_1")
+        if (!process.env.COOKIE_JSP_2) missing_vars.push("COOKIE_JSP_2")
+
+        if (OUTPUT_JSON) {
+            console.log(JSON.stringify({error: "Variables d'environnement manquantes: " + missing_vars.join(", ")}))
+        } else {
+            console.error("Variables d'environnement manquantes: " + missing_vars.join(", "))
+        }
+        process.exit(1)
+    }
+}
+
 const validate_url = (url) => {
     const regex_url = /^https:\/\/razengan\.club\/\?page_id=\d+$/g
     return regex_url.test(url)
@@ -228,5 +246,6 @@ const main = async () => {
 
 }
 
+check_env_vars()
 await main()
 process.exit(0)
