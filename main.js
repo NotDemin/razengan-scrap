@@ -5,6 +5,15 @@ import querystring from 'querystring';
 const MAIN_URL_EXTRACT = process.argv[2]
 const OUTPUT_JSON = process.argv[3]?.toLowerCase() === "true" ? true : false
 
+const display_errors = (msg_error) => {
+    if (OUTPUT_JSON) {
+        console.log(JSON.stringify({error: msg_error}))
+    } else {
+        console.error(msg_error)
+    }
+}
+
+
 const check_env_vars = () => {
     if (!process.env.RAZENGAN_LOG || !process.env.RAZENGAN_PWD || !process.env.RAZENGAN_URL || !process.env.COOKIE_JSP_1 || !process.env.COOKIE_JSP_2) {
         const missing_vars = []
@@ -14,11 +23,7 @@ const check_env_vars = () => {
         if (!process.env.COOKIE_JSP_1) missing_vars.push("COOKIE_JSP_1")
         if (!process.env.COOKIE_JSP_2) missing_vars.push("COOKIE_JSP_2")
 
-        if (OUTPUT_JSON) {
-            console.log(JSON.stringify({error: "Variables d'environnement manquantes: " + missing_vars.join(", ")}))
-        } else {
-            console.error("Variables d'environnement manquantes: " + missing_vars.join(", "))
-        }
+        display_errors("Variables d'environnement manquantes: " + missing_vars.join(", "))
         process.exit(1)
     }
 }
@@ -80,20 +85,12 @@ const get_password = async (token) => {
         );
     } catch (e) {
         if (e.status === 404) {
-            if (OUTPUT_JSON) {
-                console.log(JSON.stringify({error: "Page non trouvée"}))
-            } else {
-                console.error("Page non trouvée")
-            }
+            display_errors("Page non trouvée")
         }
         process.exit(1)
     }
 
-    if (OUTPUT_JSON) {
-        
-    } else {
-        console.log("Nom de l'anime:", get_anime_name(password_res.data))
-    }
+    if (!OUTPUT_JSON) console.log("Nom de l'anime:", get_anime_name(password_res.data))
     
     const regex = /(mot de passe)/g
     const pwd_start = password_res.data.search(regex)
@@ -111,11 +108,7 @@ const get_password = async (token) => {
     if (start_extract_pwd !== -1 && end_extract_pwd !== -1) {
         password_clean = final_str.substring(start_extract_pwd + start.length, end_extract_pwd)
     } else {
-        if (OUTPUT_JSON) {
-            console.log(JSON.stringify({error: "Les caractères spécifiés ne sont pas présents. Vérifiez qu'il s'agit bien d'une page a mot de passe"}))
-        } else {
-            console.error("Les caractères spécifiés ne sont pas présents. Vérifiez qu'il s'agit bien d'une page a mot de passe")
-        }
+        display_errors("Les caractères spécifiés ne sont pas présents. Vérifiez qu'il s'agit bien d'une page a mot de passe")
         process.exit(1)
     }
 
@@ -144,11 +137,7 @@ const get_1fichier_page = async (password, token) => {
         );
     } catch (e) {
         if (e.status === 404) {
-            if (OUTPUT_JSON) {
-                console.log(JSON.stringify({error: "Page non trouvée"}))
-            } else {
-                console.error("Page non trouvée")
-            }
+            display_errors("Page non trouvée")
         }
         process.exit(1)
     }
@@ -174,21 +163,13 @@ const get_1fichier_page = async (password, token) => {
         );
     } catch (e) {
         if (e.status === 404) {
-            if (OUTPUT_JSON) { 
-                console.log(JSON.stringify({error: "Page non trouvée"}))
-            } else {
-                console.error("Page non trouvée")
-            }
+            display_errors("Page non trouvée")
         }
         process.exit(1)
     }
 
     if (!links_after_pwd.data.includes("1fichier")) {
-        if (OUTPUT_JSON) {
-            console.log(JSON.stringify({error: "Aucun lien 1fichier trouvé"}))
-        } else {
-            console.error("Aucun lien 1fichier trouvé")
-        }
+        display_errors("Aucun lien 1fichier trouvé")
         process.exit(1)
     }
 
@@ -201,22 +182,14 @@ const get_1fichier_page = async (password, token) => {
 const main = async () => {
 
     if (!validate_url(MAIN_URL_EXTRACT)) {
-        if (OUTPUT_JSON) { 
-            console.log(JSON.stringify({error: "URL non valide"}))
-        } else {
-            console.error("URL non valide")
-        }
+        display_errors("URL non valide")
         process.exit(1)
     }
 
     const token = await login()
 
     if (!token) {
-        if (OUTPUT_JSON) { 
-            console.log(JSON.stringify({error: "Impossible de récupérer le token"}))
-        } else {
-            console.error("Impossible de récupérer le token")
-        }
+        display_errors("Impossible de récupérer le token")
         process.exit(1)
     }
 
@@ -225,11 +198,7 @@ const main = async () => {
     if (!OUTPUT_JSON) console.log("Mot de passe:", password_clean)
 
     if (!password_clean) {
-        if (OUTPUT_JSON) { 
-            console.log(JSON.stringify({error: "Impossible de récupérer le mot de passe"}))
-        } else {
-            console.error("Impossible de récupérer le mot de passe")
-        }
+        display_errors("Impossible de récupérer le mot de passe")
         process.exit(1)
     }
 
