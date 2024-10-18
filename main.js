@@ -1,7 +1,7 @@
 import axios from 'axios';
 import 'dotenv/config'
 import querystring from 'querystring';
-import { display_errors, validate_url, check_env_vars } from './utils.js';
+import { display_errors, validate_url } from './utils.js';
 
 const MAIN_URL_EXTRACT = process.argv[2]
 const OUTPUT_JSON = process.argv[3]?.toLowerCase() === "true" ? true : false
