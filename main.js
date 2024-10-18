@@ -203,9 +203,13 @@ const main = async () => {
         console.log(JSON.stringify({links: links}))
     } else {
         console.log("Liens 1fichier:")
-        links.forEach(link => {
-            console.log(link)
-        })
+        if (links.length > 0) {
+            links.forEach((link, index) => {
+                console.log(`${index + 1}: ${link}`)
+            })
+        } else {
+            console.log("Aucun lien trouvé")
+        }
     }
 
 }
