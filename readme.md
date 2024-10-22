@@ -39,5 +39,8 @@ COOKIE_JSP_2=idem
 
 >`node main.js URL`
 
-Il est possible de passer un param = 'true' pour obtenir une sortie formaté en JSON. 
->`node main.js URL true` (non sensible a la casse)
+Il est possible de passer -j ou --output-json pour obtenir une sortie formaté en JSON. 
+>`node main.js URL --output-json`
+
+Il est aussi possible de passer -s ou --separator pour afficher les séparateurs dans le cas d'une page a plusieurs groupe de liens (non disponible au format JSON)
+>`node main.js URL --separator`
