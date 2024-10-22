@@ -219,11 +219,7 @@ const main = async () => {
     const links = await get_1fichier_page(password_clean, token)
 
     if (OUTPUT_JSON) {
-        const links_JSON = links.map((link) => {
-            if (link.includes("1fichier")) {
-                return link
-            }
-        })
+        const links_JSON = links.filter(link => link.includes("1fichier"))
         console.log(JSON.stringify({links: links_JSON}))
     } else {
         console.log("Liens 1fichier:")
