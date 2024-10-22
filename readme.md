@@ -18,7 +18,7 @@ Pour utiliser :
 
 >Aller dans payload et récuperer les deux cookies
 
-![Comme ceci](https://cdn.discordapp.com/attachments/870433433996890193/1296747353725997076/tesdzqzd.png?ex=67136995&is=67121815&hm=ff5ab397634db66e433c6d7f662e0585db61415d3d4761c1294902beca90b4cb&)
+![Comme ceci](https://i.imgur.com/PDuau1A.png)
 
 >Remplir un fichier .env dans le dossier avec les infos suivantes : 
 >(.env.template)
