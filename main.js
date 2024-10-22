@@ -1,10 +1,17 @@
 import axios from 'axios';
 import 'dotenv/config';
 import querystring from 'querystring';
-import { display_errors, validate_url } from './utils.js';
+import { display_errors, validate_url, decode_html_char_codes, parse_args } from './utils.js';
 
-const MAIN_URL_EXTRACT = process.argv[2]
-const OUTPUT_JSON = process.argv[3]?.toLowerCase() === "true" ? true : false
+const args = parse_args()
+
+const MAIN_URL_EXTRACT = args.url
+const OUTPUT_JSON = args.output_json || false
+const SEPARATOR = args.separator || false
+
+const REGEX_1fichier = /https:\/\/1fichier\.com\/\?[^"]+/g
+const REGEX_seperator = /(?<=>)([^<>]+)(?=<)/g
+const REGEX_h5 = /<h5 style="text-align: center;">.*<\/h5>/g
 
 const get_anime_name = (html) => {
     const title_start = html.indexOf("Protégé : Liens")
@@ -167,11 +174,23 @@ const get_1fichier_page = async (password, token) => {
         display_errors("Aucun lien 1fichier trouvé", OUTPUT_JSON)
         process.exit(1)
     }
+    
+    const match_h5 = links_after_pwd.data.match(REGEX_h5)
 
-    const regex = /https:\/\/1fichier\.com\/\?[^"]+/g
-    const matches = links_after_pwd.data.match(regex)
+    const clean_matches = []
 
-    return matches
+    if (match_h5.length > 0) {
+
+        match_h5.forEach(match => {
+            if (REGEX_1fichier.test(match)) {
+                clean_matches.push(match.match(REGEX_1fichier)[0])
+            } else {
+                clean_matches.push(decode_html_char_codes(match.match(REGEX_seperator)[0]))
+            }
+        })
+    }
+
+    return clean_matches
 }
 
 const main = async () => {
@@ -199,14 +218,27 @@ const main = async () => {
 
     const links = await get_1fichier_page(password_clean, token)
 
-    if (OUTPUT_JSON) { 
-        console.log(JSON.stringify({links: links}))
+    if (OUTPUT_JSON) {
+        const links_JSON = links.map((link) => {
+            if (link.includes("1fichier")) {
+                return link
+            }
+        })
+        console.log(JSON.stringify({links: links_JSON}))
     } else {
         console.log("Liens 1fichier:")
         if (links.length > 0) {
-            links.forEach((link, index) => {
-                console.log(`${index + 1}: ${link}`)
-            })
+            if (SEPARATOR) {
+                links.forEach((link, index) => {
+                    console.log(link)
+                })
+            } else {
+                links.forEach((link, index) => {
+                    if (link.includes("1fichier")) {
+                        console.log(link)
+                    }
+                })
+            }
         } else {
             console.log("Aucun lien trouvé")
         }
