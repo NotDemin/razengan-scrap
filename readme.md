@@ -42,5 +42,5 @@ COOKIE_JSP_2=idem
 Il est possible de passer -j ou --output-json pour obtenir une sortie formaté en JSON. 
 >`node main.js URL --output-json`
 
-Il est aussi possible de passer -s ou --separator pour afficher les séparateurs dans le cas d'une page a plusieurs groupe de liens (non disponible au format JSON)
+Il est aussi possible de passer -s ou --separator pour afficher les séparateurs dans le cas d'une page a plusieurs groupe de liens (Au format JSON cela donne des lignes - - - -)
 >`node main.js URL --separator`

@@ -16,24 +16,24 @@ export const decode_html_char_codes = str => {
 }
 
 export const parse_args = () => {
-    const KNOWN_ARGS = ["-j", "-s", "--output-json", "--separator"]
-
-    const args = process.argv.slice(3)
     const args_obj = {}
+    args_obj["url"] = process.argv[2]
+    const args = process.argv.slice(3)
+
+    const KNOWN_ARGS = {
+        "-j": { output_json: true },
+        "--output-json": { output_json: true },
+        "-s": { separator: true },
+        "--separator": { separator: true },
+        "-js": { output_json: true, separator: true },
+        "-sj": { output_json: true, separator: true }
+    }
+
     args.forEach((arg) => {
-        if (KNOWN_ARGS.includes(arg)) {
-            switch (true) {
-                case arg === "--output-json" || arg === "-j":
-                    args_obj["output_json"] = true
-                    break
-                case arg === "--separator" || arg === "-s":
-                    args_obj["separator"] = true
-                    break
-            }
+        if (KNOWN_ARGS[arg]) {
+            Object.assign(args_obj, KNOWN_ARGS[arg])
         }
     })
-
-    args_obj["url"] = process.argv[2]
 
     return args_obj
 }

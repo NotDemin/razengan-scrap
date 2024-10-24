@@ -38,6 +38,34 @@ const check_env_vars = () => {
     }
 }
 
+const final_output = (links) => {
+    if (OUTPUT_JSON) {
+        if (SEPARATOR) {
+            console.log(JSON.stringify({links: links}))
+        } else {
+            const links_JSON = links.filter(link => link.includes("1fichier"))
+            console.log(JSON.stringify({links: links_JSON}))
+        }
+    } else {
+        console.log("Liens 1fichier:")
+        if (links.length > 0) {
+            if (SEPARATOR) {
+                links.forEach((link) => {
+                    console.log(link)
+                })
+            } else {
+                links.forEach((link) => {
+                    if (link.includes("1fichier")) {
+                        console.log(link)
+                    }
+                })
+            }
+        } else {
+            console.log("Aucun lien trouvé")
+        }
+    }
+}
+
 const login = async () => {
     const data_login = {
         'log': process.env.RAZENGAN_LOG,
@@ -217,29 +245,8 @@ const main = async () => {
     }
 
     const links = await get_1fichier_page(password_clean, token)
-
-    if (OUTPUT_JSON) {
-        const links_JSON = links.filter(link => link.includes("1fichier"))
-        console.log(JSON.stringify({links: links_JSON}))
-    } else {
-        console.log("Liens 1fichier:")
-        if (links.length > 0) {
-            if (SEPARATOR) {
-                links.forEach((link, index) => {
-                    console.log(link)
-                })
-            } else {
-                links.forEach((link, index) => {
-                    if (link.includes("1fichier")) {
-                        console.log(link)
-                    }
-                })
-            }
-        } else {
-            console.log("Aucun lien trouvé")
-        }
-    }
-
+    
+    final_output(links)
 }
 
 check_env_vars()
